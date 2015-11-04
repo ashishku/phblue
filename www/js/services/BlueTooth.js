@@ -14,6 +14,19 @@
       connectedTo: {}
     };
   }
+
+  BlueTooth.prototype.sendMsg = function(msg) {
+    var that = this;
+
+    if(that.connection.connected) {
+      that.write(msg, function() {
+        console.log('S: [' + msg + ']');
+      }, function () {
+        console.log('F: [' + msg + ']');
+      });
+    }
+  };
+
   BlueTooth.prototype.enable = function() {
     var that = this;
     var deferred = this.q.defer();
