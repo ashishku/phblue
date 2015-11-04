@@ -1,0 +1,32 @@
+<ion-view view-title="Connection">
+  <ion-content>
+    <h3 ng-show="connection.connected">
+      <i class="icon ion-android-checkmark-circle"></i> {{connection.connectedTo.name}}
+    </h3>
+    <h3 ng-hide="connection.connected">
+      <i class="icon ion-android-cancel"></i> Not Connect
+    </h3>
+
+    <div class="list list-inset">
+      <div class="item item-divider item-icon-left">
+        <i class="icon ion-ios-locked"></i>Paired devices
+      </div>
+      <div class="item" ng-repeat="pd in pairedDevices" ng-click="conntectTo(pd)">
+        <h2>{{pd.name}} <span ng-if="isConnectedTo(pd)"> <i class="icon ion-android-checkmark-circle" style="color: green;"></i> </span></h2>
+        <p>{{pd.address}}</p>
+      </div>
+    </div>
+
+    <div class="list list-insert">
+      <div class="item item-divider item-icon-left item-button-right">
+        <i class="icon ion-ios-unlocked"></i> Other Available Devices
+        <button class="button button-clear button-positive" ng-click="searchUnpaired()">
+          <i class="icon ion-android-search"></i>
+        </button>
+      </div>
+      <div class="item" ng-repeat="upd in unpairedDevices" ng-click="conntectTo(upd)">
+        <h2>{{upd.name}} <span ng-if="isConnectedTo(upd)"> </span></h2>
+        <p>{{upd.address}}</p>
+      </div>
+  </ion-content>
+</ion-view>

@@ -1,0 +1,36 @@
+<ion-side-menus enable-menu-with-back-views="false">
+  <ion-side-menu-content>
+    <ion-nav-bar class="bar-stable">
+      <ion-nav-back-button>
+      </ion-nav-back-button>
+
+      <ion-nav-buttons side="left">
+        <button class="button button-icon button-clear ion-navicon" menu-toggle="left">
+        </button>
+      </ion-nav-buttons>
+    </ion-nav-bar>
+    <ion-nav-view name="menuContent"></ion-nav-view>
+  </ion-side-menu-content>
+
+  <ion-side-menu side="left">
+    <ion-header-bar class="bar-stable">
+      <h1 class="title">Bluetooth Car</h1>
+    </ion-header-bar>
+    <ion-content>
+      <ion-list>
+        <ion-item menu-close href="#/app/connection">
+          <i class="icon ion-ios-pulse-strong"></i> Connect to a device
+        </ion-item>
+        <ion-item menu-close href="#/app/auto">
+          <i class="icon ion-model-s"></i> Auto Drive
+        </ion-item>
+        <ion-item menu-close href="#/app/remote/joystic">
+          <i class="icon ion-ios-game-controller-a"></i> Manual Drive
+        </ion-item>
+        <ion-item menu-close href="#/app/remote/accelerometer">
+          <i class="icon ion-ios-game-controller-b"></i> Accelerometer
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-side-menu>
+</ion-side-menus>
