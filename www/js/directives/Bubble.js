@@ -24,7 +24,7 @@
         bubble = $('.bubble');
 
         $interval(function () {
-          bluetooth.sendMsg('T' + angles.theta + 'D' + Math.floor(angles.deg * 100) / 100);
+          bluetooth.sendMsg('T' + Math.floor(angles.theta) + 'D' + Math.floor(angles.deg * 100));
         }, 100);
 
         attr.$observe('dir', function() {
