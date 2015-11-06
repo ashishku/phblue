@@ -4,6 +4,6 @@
   app.controller('AppCtrl', ['$scope', 'BlueTooth', AppCtrl]);
 
   function AppCtrl(scope, bluetooth) {
-    bluetooth.enable();
+    scope.connection = bluetooth.connection;
   }
 }());

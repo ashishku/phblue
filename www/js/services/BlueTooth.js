@@ -15,6 +15,10 @@
     };
   }
 
+  BlueTooth.prototype.isConnectedTo = function (device) {
+    return (this.connection.connected && this.connection.connectedTo.address === device.address);
+  };
+
   BlueTooth.prototype.sendMsg = function(msg) {
     var that = this;
 

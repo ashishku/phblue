@@ -21,13 +21,13 @@
         <ion-item menu-close href="#/app/connection">
           <i class="icon ion-ios-pulse-strong"></i> Connect to a device
         </ion-item>
-        <ion-item menu-close href="#/app/auto">
+        <ion-item menu-close href="#/app/auto" ng-show="connection.connected">
           <i class="icon ion-model-s"></i> Auto Drive
         </ion-item>
-        <ion-item menu-close href="#/app/remote/joystic">
+        <ion-item menu-close href="#/app/remote/joystic" ng-show="connection.connected">
           <i class="icon ion-ios-game-controller-a"></i> Manual Drive
         </ion-item>
-        <ion-item menu-close href="#/app/remote/accelerometer">
+        <ion-item menu-close href="#/app/remote/accelerometer" ng-show="connection.connected">
           <i class="icon ion-ios-game-controller-b"></i> Accelerometer
         </ion-item>
       </ion-list>

@@ -10,17 +10,21 @@
       theta: 0, deg: 0
     };
 
+    var bubble;
+
     return {
       templateUrl: 'templates/bubble.html',
       link: function(scope, ele, attr) {
-        $(".block").css('top',(screen.height-275)/2)
-                   .css('left',(screen.width-275)/2);
+        $('.block').css('top',(screen.height-275)/2);
+        $('.block').css('left',(screen.width-275)/2);
 
-        panel_width = $('.panel').outerWidth();
+        panel_width  = $('.panel').outerWidth();
         panel_height = $('.panel').outerHeight();
 
+        bubble = $('.bubble');
+
         $interval(function () {
-          bluetooth.sendMsg('T' + angles.theta + 'D' + angles.deg);
+          bluetooth.sendMsg('T' + angles.theta + 'D' + Math.floor(angles.deg * 100) / 100);
         }, 100);
 
         attr.$observe('dir', function() {
@@ -32,13 +36,13 @@
             var z = dir.z;
 
             var r = Math.sqrt(x*x + y*y +z*z);
-            var theta = parseInt(Math.atan(Math.sqrt(x*x + y*y)/z)*180/Math.PI);
-            var deg = Math.atan2(x, y);
+            var theta  = parseInt(Math.atan(Math.sqrt(x*x + y*y)/z)*180/Math.PI);
+            var deg    = Math.atan2(x, y);
             var length = Math.sqrt(angles.x * angles.x + angles.y * angles.y)*panel_width/2/angles.r;
 
             angles = {
-                theta: theta,   deg: deg,   l: length,
-                r: r,           x: x,       y: y
+              theta: theta,   deg: deg,   l: length,
+              r: r,           x: x,       y: y
             };
 
             moveBubble(angles);
@@ -48,16 +52,11 @@
     };
 
     function moveBubble(angles) {
-        // new offsets for bubble div
-        var left = 0;
-        var top = 0;
+      var left = panel_width/2  - bubble_half + angles.l * Math.sin(angles.deg);
+      var top  = panel_height/2 - bubble_half - angles.l * Math.cos(angles.deg) + 2;
 
-        left = panel_width/2 - bubble_half + length*Math.sin(angles.deg);
-        top  = panel_height/2 - bubble_half - length*Math.cos(angles.deg) + 2;
-
-        // Set new offsets
-        $('.bubble').css('top', top)
-                    .css('left', left);
+      bubble.css('left', left);
+      bubble.css('top', top);
     }
   }]);
 }());
