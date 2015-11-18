@@ -30,11 +30,16 @@
     });
 
     scope.isConnectedTo = function(device) {
-      return bluetooth.isConnectedTo();
+      return bluetooth.isConnectedTo(device);
     };
 
     scope.conntectTo = function(device) {
-      bluetooth.connect(device);
+      $ionicLoading.show({
+        template: 'Connecting...'
+      });
+      bluetooth.connect(device, function() {
+        $ionicLoading.hide();
+      });
     };
 
     scope.searchUnpaired = function() {

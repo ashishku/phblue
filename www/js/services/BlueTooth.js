@@ -21,9 +21,9 @@
 
   BlueTooth.prototype.sendMsg = function(msg) {
     var that = this;
-
+    console.log(msg);
     if(that.connection.connected) {
-      that.write(msg, function() {
+      that.bluetooth.write(msg, function() {
         console.log('S: [' + msg + ']');
       }, function () {
         console.log('F: [' + msg + ']');
@@ -92,7 +92,7 @@
     return deferred.promise;
   };
 
-  BlueTooth.prototype.connect = function(device) {
+  BlueTooth.prototype.connect = function(device, cb) {
     var that = this;
     var deferred = this.q.defer();
 
@@ -101,11 +101,15 @@
         that.bluetooth.connect(device.address).then(function () {
           that.connection.connected = true;
           that.connection.connectedTo = device;
-          that.q.resolve();
+
+          cb();
+          deferred.resolve();
         }, function (error) {
           that.connection.connected = false;
           that.connection.connectedTo = {};
-          that.q.reject(error);
+
+          cb();
+          deferred.reject(error);
         });
       }
       else {

@@ -7,7 +7,11 @@
     var panel_height = 0;
 
     var angles = {
-      theta: 0, deg: 0
+      data: {
+        left: 0,
+        len: 0,
+        top: 0
+      }
     };
 
     var bubble;
@@ -15,17 +19,32 @@
     return {
       templateUrl: 'templates/bubble.html',
       link: function(scope, ele, attr) {
-        $('.block').css('top',(screen.height-275)/2);
-        $('.block').css('left',(screen.width-275)/2);
+        var block = $('.block');
+        block.css('top',(screen.height-275)/2);
+        block.css('left',(screen.width-275)/2);
 
-        panel_width  = $('.panel').outerWidth();
-        panel_height = $('.panel').outerHeight();
+        var panel = $('.panel');
+        panel_width  = panel.outerWidth();
+        panel_height = panel.outerHeight();
 
         bubble = $('.bubble');
 
+        //$interval(function () {
+        //  bluetooth.sendMsg('M' + getSpeedText(angles.data.len, angles.data.top) + getDirText(angles.data.left));
+        //}, 75);
+
         $interval(function () {
-          bluetooth.sendMsg('T' + Math.floor(angles.theta) + 'D' + Math.floor(angles.deg * 100));
-        }, 100);
+          var msg = getSpeedText(angles.data.len, angles.data.top);
+          if(msg) {
+            bluetooth.sendMsg(msg);
+          }
+        }, 500);
+        $interval(function () {
+          var msg = getDirText(angles.data.left);
+          if(msg) {
+            bluetooth.sendMsg(msg);
+          }
+        }, 500);
 
         attr.$observe('dir', function() {
           if(attr.dir && attr.dir !== '') {
@@ -42,7 +61,8 @@
 
             angles = {
               theta: theta,   deg: deg,   l: length,
-              r: r,           x: x,       y: y
+              r: r,           x: x,       y: y,
+              z: z
             };
 
             moveBubble(angles);
@@ -57,6 +77,72 @@
 
       bubble.css('left', left);
       bubble.css('top', top);
+
+      angles.data = {
+        left: left - 101,
+        top: top - 101,
+        len: angles.l
+      }
+    }
+
+    function getSpeedText(num, dir) {
+      var text;
+
+      num = Math.floor(num);
+
+      if(dir < 0) {
+        text = 'F';
+      }
+      else {
+        text = 'B';
+      }
+
+      if(num < 16) {
+        return 'STOP\n';
+        //return 'X000';
+      }
+
+      //if(num < 100) {
+      //  text += '0';
+      //}
+      //if(num < 10) {
+      //  text += '0';
+      //}
+
+      text += num;
+      text += '\n';
+
+      return text;
+    }
+    function getDirText(num) {
+      var text;
+
+      num = Math.floor(num);
+
+      if(num < 0) {
+        text = 'L';
+        num = num * -1;
+      }
+      else {
+        text = 'R';
+      }
+
+      if(num < 16) {
+        //return 'X000';
+        return false;
+      }
+
+      //if(num < 100) {
+      //  text += '0';
+      //}
+      //if(num < 10) {
+      //  text += '0';
+      //}
+
+      text += num;
+      text += '\n';
+
+      return text;
     }
   }]);
 }());
