@@ -13,6 +13,13 @@
         top: 0
       }
     };
+    var preAngles = {
+      data: {
+        left: 0,
+        len: 0,
+        top: 0
+      }
+    };
 
     var bubble;
 
@@ -33,18 +40,26 @@
         //  bluetooth.sendMsg('M' + getSpeedText(angles.data.len, angles.data.top) + getDirText(angles.data.left));
         //}, 75);
 
+
         $interval(function () {
-          var msg = getSpeedText(angles.data.len, angles.data.top);
-          if(msg) {
-            bluetooth.sendMsg(msg);
+          if(changeInDir(preAngles.data.top, angles.data.top) || outSideLimit(preAngles.data.len, angles.data.len, 3)) {
+            preAngles.data.top = angles.data.top;
+            preAngles.data.len = angles.data.len;
+            var msg = getSpeedText(angles.data.len, angles.data.top);
+            if (msg) {
+              bluetooth.sendMsg(msg);
+            }
           }
-        }, 500);
+        }, 75);
         $interval(function () {
-          var msg = getDirText(angles.data.left);
-          if(msg) {
-            bluetooth.sendMsg(msg);
+          if(outSideLimit(preAngles.data.left, angles.data.left, 3)) {
+            preAngles.data.left = angles.data.left;
+            var msg = getDirText(angles.data.left);
+            if (msg) {
+              bluetooth.sendMsg(msg);
+            }
           }
-        }, 500);
+        }, 75);
 
         attr.$observe('dir', function() {
           if(attr.dir && attr.dir !== '') {
@@ -70,6 +85,20 @@
         });
       }
     };
+
+    function changeInDir(p, c) {
+      var pD = (p > 0) ? true : false;
+      var cD = (c > 0) ? true : false;
+
+      return (pD !== cD);
+    }
+
+    function outSideLimit(p, c, d) {
+      var p1 = p - d;
+      var p2 = p + d;
+
+      return (p1 > c || p2 < c);
+    }
 
     function moveBubble(angles) {
       var left = panel_width/2  - bubble_half + angles.l * Math.sin(angles.deg);
